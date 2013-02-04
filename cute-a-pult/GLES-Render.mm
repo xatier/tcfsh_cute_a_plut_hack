@@ -182,5 +182,6 @@ void GLESDebugDraw::DrawAABB(b2AABB* aabb, const b2Color& c)
 	};
 	glVertexPointer(2, GL_FLOAT, 0, glVertices);
 	glDrawArrays(GL_LINE_LOOP, 0, 8);
+    
 	
 }

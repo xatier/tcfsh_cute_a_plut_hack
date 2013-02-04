@@ -35,6 +35,11 @@
 
     NSMutableSet *targets;
     NSMutableSet *enemies;
+    
+    CCLabelTTF *score_label;
+    int score;
+    
+    NSString *foo;
 
     MyContactListener *contactListener;
 }

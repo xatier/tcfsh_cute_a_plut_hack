@@ -1,3 +1,11 @@
+
+this is a hacked version of Cute a pult for education use in Taichung First Senior High School
+
+[my mail](xatierlike@gmail.com)
+
+
+
+
 Cute-a-pult
 ===================
 

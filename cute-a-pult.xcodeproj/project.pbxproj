@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D72DA0716ADA542003F90F9 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D72DA0616ADA542003F90F9 /* Default-568h@2x.png */; };
+		3DE4462C16B36EE9003207F9 /* GameOverScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DE4462B16B36EE9003207F9 /* GameOverScene.mm */; };
 		EC4A3DC8140B013A003B6915 /* MyContactListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC4A3DC6140B013A003B6915 /* MyContactListener.cpp */; };
 		EC76334714042D1F008FCE5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC76334614042D1F008FCE5D /* QuartzCore.framework */; };
 		EC76334914042D1F008FCE5D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC76334814042D1F008FCE5D /* OpenGLES.framework */; };
@@ -193,6 +195,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D72DA0616ADA542003F90F9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		3DE4462A16B36EE9003207F9 /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameOverScene.h; path = GameOverScene/GameOverScene.h; sourceTree = "<group>"; };
+		3DE4462B16B36EE9003207F9 /* GameOverScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GameOverScene.mm; path = GameOverScene/GameOverScene.mm; sourceTree = "<group>"; };
 		EC4A3DC6140B013A003B6915 /* MyContactListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyContactListener.cpp; sourceTree = "<group>"; };
 		EC4A3DC7140B013A003B6915 /* MyContactListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyContactListener.h; sourceTree = "<group>"; };
 		EC76334214042D1F008FCE5D /* cute-a-pult.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cute-a-pult.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,7 +218,7 @@
 		EC76336414042D1F008FCE5D /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		EC76336614042D1F008FCE5D /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		EC76336814042D1F008FCE5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
-		EC76336914042D1F008FCE5D /* iTunesArtwork.png */ = {isa = PBXFileReference; name = iTunesArtwork.png; path = Resources/iTunesArtwork.png; sourceTree = "<group>"; };
+		EC76336914042D1F008FCE5D /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/iTunesArtwork.png; sourceTree = "<group>"; };
 		EC76336D14042D1F008FCE5D /* CCAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCAction.h; path = libs/cocos2d/CCAction.h; sourceTree = "<group>"; };
 		EC76336E14042D1F008FCE5D /* CCAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CCAction.m; path = libs/cocos2d/CCAction.m; sourceTree = "<group>"; };
 		EC76337014042D1F008FCE5D /* CCActionCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCActionCamera.h; path = libs/cocos2d/CCActionCamera.h; sourceTree = "<group>"; };
@@ -560,6 +565,7 @@
 		EC76333714042D1E008FCE5D = {
 			isa = PBXGroup;
 			children = (
+				3D72DA0616ADA542003F90F9 /* Default-568h@2x.png */,
 				EC76335614042D1F008FCE5D /* cute-a-pult */,
 				EC76334514042D1F008FCE5D /* Frameworks */,
 				EC76334314042D1F008FCE5D /* Products */,
@@ -598,6 +604,8 @@
 				EC76351F14042D22008FCE5D /* RootViewController.m */,
 				EC76352114042D22008FCE5D /* HelloWorldLayer.h */,
 				EC76352214042D22008FCE5D /* HelloWorldLayer.mm */,
+				3DE4462A16B36EE9003207F9 /* GameOverScene.h */,
+				3DE4462B16B36EE9003207F9 /* GameOverScene.mm */,
 				EC4A3DC7140B013A003B6915 /* MyContactListener.h */,
 				EC4A3DC6140B013A003B6915 /* MyContactListener.cpp */,
 				EC76352414042D22008FCE5D /* GLES-Render.h */,
@@ -1133,6 +1141,7 @@
 		EC76333914042D1E008FCE5D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "CodeCrop Software";
 			};
 			buildConfigurationList = EC76333C14042D1E008FCE5D /* Build configuration list for PBXProject "cute-a-pult" */;
@@ -1197,6 +1206,7 @@
 				ECF4942A1404455C009C31B9 /* squirrel_1.png in Resources */,
 				ECF4942B1404455C009C31B9 /* squirrel_2-hd.png in Resources */,
 				ECF4942C1404455C009C31B9 /* squirrel_2.png in Resources */,
+				3D72DA0716ADA542003F90F9 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1342,6 +1352,7 @@
 				EC76352314042D22008FCE5D /* HelloWorldLayer.mm in Sources */,
 				EC76352614042D22008FCE5D /* GLES-Render.mm in Sources */,
 				EC4A3DC8140B013A003B6915 /* MyContactListener.cpp in Sources */,
+				3DE4462C16B36EE9003207F9 /* GameOverScene.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1393,6 +1404,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cute-a-pult/Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "cute-a-pult/Resources/Info.plist";
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1409,6 +1421,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cute-a-pult/Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "cute-a-pult/Resources/Info.plist";
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "$(TARGET_NAME)";

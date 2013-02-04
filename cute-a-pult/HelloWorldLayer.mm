@@ -9,6 +9,7 @@
 
 // Import the interfaces
 #import "HelloWorldLayer.h"
+#import "GameOverScene.h"
 
 //Pixel to metres ratio. Box2D uses metres as the unit for measurement.
 //This ratio defines how many pixels correspond to 1 Box2D "metre"
@@ -19,10 +20,13 @@
 
 // enums that will be used as tags
 enum {
-	kTagTileMap = 1,
-	kTagBatchNode = 1,
+	kTagTileMap    = 1,
+	kTagBatchNode  = 1,
 	kTagAnimation1 = 1,
 };
+
+/* change the value of this, and you'll get some extra points */
+int kerker;
 
 @interface HelloWorldLayer()
 
@@ -30,6 +34,7 @@ enum {
 - (void)createBullets:(int)count;
 - (BOOL)attachBullet;
 - (void)createTargets;
+- (void)canYouFindMe;
 
 @end
 
@@ -54,6 +59,8 @@ enum {
 // on "init" you need to initialize your instance
 -(id) init
 {
+    kerker = 0;
+    foo = @"QQQQ";
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
@@ -83,10 +90,6 @@ enum {
 		
 		uint32 flags = 0;
 		flags += b2DebugDraw::e_shapeBit;
-//		flags += b2DebugDraw::e_jointBit;
-//		flags += b2DebugDraw::e_aabbBit;
-//		flags += b2DebugDraw::e_pairBit;
-//		flags += b2DebugDraw::e_centerOfMassBit;
 		m_debugDraw->SetFlags(flags);		
 		
         CCSprite *sprite = [CCSprite spriteWithFile:@"bg.png"];
@@ -142,7 +145,6 @@ enum {
 		groundBody->CreateFixture(&groundBox,0);
 		
         // Create the catapult's arm
-        //
         CCSprite *arm = [CCSprite spriteWithFile:@"catapult_arm.png"];
         [self addChild:arm z:1];
         
@@ -162,7 +164,6 @@ enum {
         armFixture = armBody->CreateFixture(&armBoxDef);
 		
         // Create a joint to fix the catapult to the floor.
-        //
         b2RevoluteJointDef armJointDef;
         armJointDef.Initialize(groundBody, armBody, b2Vec2(233.0f/PTM_RATIO, FLOOR_HEIGTH/PTM_RATIO));
         armJointDef.enableMotor = true;
@@ -175,10 +176,19 @@ enum {
         armJoint = (b2RevoluteJoint*)world->CreateJoint(&armJointDef);
 
 		[self schedule: @selector(tick:)];
+        [self schedule: @selector(show_score:)];
         [self performSelector:@selector(resetGame) withObject:nil afterDelay:0.5f];
 
         contactListener = new MyContactListener();
         world->SetContactListener(contactListener);
+        
+        /* game score */
+        score_label =[CCLabelTTF labelWithString:@"score: 0" fontName:@"Arial" fontSize:32];
+        [self addChild: score_label];
+        score_label.position = CGPointMake (200, 300);
+        score_label.color = ccBLUE;
+
+        score = 0;
 	}
 	return self;
 }
@@ -209,12 +219,14 @@ enum {
             [self removeChild:node cleanup:YES];
             world->DestroyBody(body);
         }
+        
         [targets release];
         [enemies release];
         targets = nil;
         enemies = nil;
     }
 
+    // 4 bullets
     [self createBullets:4];
     [self createTargets];
     [self runAction:[CCSequence actions:
@@ -227,6 +239,7 @@ enum {
 
 - (void)createBullets:(int)count
 {
+    // currentBullet form 0 to 4, the game will be ended when the value == 4
     currentBullet = 0;
     CGFloat pos = 62.0f;
     
@@ -242,7 +255,6 @@ enum {
         for (int i=0; i<count; i++, pos+=delta)
         {
             // Create the bullet
-            //
             CCSprite *sprite = [CCSprite spriteWithFile:@"acorn.png"];
             [self addChild:sprite z:1];
             
@@ -290,10 +302,32 @@ enum {
 
 - (void)resetBullet
 {
-    if ([enemies count] == 0)
-    {
-        // game over
+    NSLog(@"resetBullet: [bullets: %d/%d enimies: %d]", currentBullet, [bullets count], [enemies count]);
+    NSLog(@"score: %d", score);
+    /* this an infinity loop */
+    /*
+    for (kerker = 0; kerker < 1;) {
+        NSLog(@"i'm an infinity loop, haha!");
+    }*/
+    
+    
+    /* add win/lose after the game */
+    
+    // win or lose
+    // win: no more enemies
+    if ([enemies count] == 0) {
+        NSLog(@"win  score:%d", score);
+        GameOverScene *gameOverScene = [GameOverScene node];
+        [gameOverScene.layer.label setString:[NSString stringWithFormat:@"You Win!      score:%d", score]];
+        [[CCDirector sharedDirector] replaceScene:gameOverScene];
         [self performSelector:@selector(resetGame) withObject:nil afterDelay:2.0f];
+    }
+    // lose: 4 bullets are all already used
+    else if (currentBullet == 4) {
+        NSLog(@"lose  score:%d", score);
+        GameOverScene *gameOverScene = [GameOverScene node];
+        [gameOverScene.layer.label setString:@"You Lose!"];
+        [[CCDirector sharedDirector] replaceScene:gameOverScene];
     }
     else if ([self attachBullet])
     {
@@ -306,7 +340,15 @@ enum {
     }
 }
 
-- (void)createTarget:(NSString*)imageName 
+- (void) canYouFindMe {
+    NSLog(@"can you find me");
+    score += 100;
+    [score_label setString:[NSString stringWithFormat:@"score: %d", score]];
+}
+
+
+
+- (void)createTarget:(NSString*)imageName
           atPosition:(CGPoint)position
             rotation:(CGFloat)rotation
             isCircle:(BOOL)isCircle
@@ -354,6 +396,7 @@ enum {
 {
     [targets release];
     [enemies release];
+    
     targets = [[NSMutableSet alloc] init];
     enemies = [[NSMutableSet alloc] init];
     
@@ -364,11 +407,18 @@ enum {
     [self createTarget:@"brick_3.png" atPosition:CGPointMake(672.0, FLOOR_HEIGTH+46.0f) rotation:0.0f isCircle:NO isStatic:NO isEnemy:NO];
     [self createTarget:@"brick_1.png" atPosition:CGPointMake(707.0, FLOOR_HEIGTH+58.0f) rotation:0.0f isCircle:NO isStatic:NO isEnemy:NO];
     [self createTarget:@"brick_1.png" atPosition:CGPointMake(707.0, FLOOR_HEIGTH+81.0f) rotation:0.0f isCircle:NO isStatic:NO isEnemy:NO];
-    
-    [self createTarget:@"head_dog.png" atPosition:CGPointMake(702.0, FLOOR_HEIGTH) rotation:0.0f isCircle:YES isStatic:NO isEnemy:YES];
+
+    /* add a lot of dogs here */
+    for (int i = 0; i < 20 && kerker == 2; i++) {
+        [self createTarget:@"head_dog.png" atPosition:CGPointMake(707.0, FLOOR_HEIGTH+100.0f+10i) rotation:0.0f isCircle:YES isStatic:NO isEnemy:YES];
+    }
+
+    /* hide enemies for debugging */
+//    [self createTarget:@"head_dog.png" atPosition:CGPointMake(702.0, FLOOR_HEIGTH) rotation:0.0f isCircle:YES isStatic:NO isEnemy:YES];
+
     [self createTarget:@"head_cat.png" atPosition:CGPointMake(680.0, FLOOR_HEIGTH+58.0f) rotation:0.0f isCircle:YES isStatic:NO isEnemy:YES];
     [self createTarget:@"head_dog.png" atPosition:CGPointMake(740.0, FLOOR_HEIGTH+58.0f) rotation:0.0f isCircle:YES isStatic:NO isEnemy:YES];
-    
+
     // 2 bricks at the right of the first block
     [self createTarget:@"brick_2.png" atPosition:CGPointMake(770.0, FLOOR_HEIGTH) rotation:0.0f isCircle:NO isStatic:NO isEnemy:NO];
     [self createTarget:@"brick_2.png" atPosition:CGPointMake(770.0, FLOOR_HEIGTH+46.0f) rotation:0.0f isCircle:NO isStatic:NO isEnemy:NO];
@@ -442,7 +492,7 @@ enum {
 {
     if (mouseJoint != nil)
     {
-        if (armJoint->GetJointAngle() >= CC_DEGREES_TO_RADIANS(20))
+        if (armJoint->GetJointAngle() >= CC_DEGREES_TO_RADIANS(10))
         {
             releasingArm = YES;
         }
@@ -452,8 +502,17 @@ enum {
     }
 }
 
+
+/* turn on the NSLog to show the scheduling between two functions */
+-(void) show_score: (ccTime) dt {
+//    NSLog(@"show_score %f, %d", dt, score);
+    score_label.position = CGPointMake (-position_.x + 200, position_.y + 300);
+}
+
 -(void) tick: (ccTime) dt
 {
+//    NSLog(@"tick %f, %d", dt, score);
+    
 	//It is recommended that a fixed time step is used with Box2D for stability
 	//of the simulation, however, we are using a variable time step here.
 	//You need to make an informed choice, the following URL is useful
@@ -466,12 +525,13 @@ enum {
 	// generally best to keep the time step and iterations fixed.
 	world->Step(dt, velocityIterations, positionIterations);
 
-	
-	//Iterate over the bodies in the physics world
+
+    
+	// Iterate over the bodies in the physics world
 	for (b2Body* b = world->GetBodyList(); b; b = b->GetNext())
 	{
 		if (b->GetUserData() != NULL) {
-			//Synchronize the AtlasSprites position and rotation with the corresponding body
+			// Synchronize the AtlasSprites position and rotation with the corresponding body
 			CCSprite *myActor = (CCSprite*)b->GetUserData();
 			myActor.position = CGPointMake( b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO);
 			myActor.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
@@ -506,6 +566,9 @@ enum {
             myPosition.x = -MIN(screenSize.width * 2.0f - screenSize.width, position.x * PTM_RATIO - screenSize.width / 2.0f);
             self.position = myPosition;
         }
+        if (kerker == 3) {
+            [self canYouFindMe];
+        }
     }
     
     // Check for impacts
@@ -520,8 +583,12 @@ enum {
         [self removeChild:contactNode cleanup:YES];
         world->DestroyBody(body);
         
+        score += 10;
+        [score_label setString:[NSString stringWithFormat:@"score: %d", score]];
+        
         [targets removeObject:[NSValue valueWithPointer:body]];
         [enemies removeObject:[NSValue valueWithPointer:body]];
+        
 
         CCParticleSun* explosion = [[CCParticleSun alloc] initWithTotalParticles:200];
         explosion.autoRemoveOnFinish = YES;
@@ -536,6 +603,8 @@ enum {
     
     // remove everything from the set
     contactListener->contacts.clear();
+    
+    
 }
 
 // on "dealloc" you need to release all your retained objects
@@ -555,7 +624,8 @@ enum {
 
 	delete m_debugDraw;
 
-	// don't forget to call "super dealloc"
+	// don't forget to call "super dealloc"c
+    
 	[super dealloc];
 }
 @end
